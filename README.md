@@ -16,11 +16,7 @@ Make sure you have user scripts plugin installed in your browser. Here are the m
 
 You can install script:
 
-* directly from GitHub by clicking [here][script-github],
-* from [GreasyFork page][script-greasyfork],
-* or from [OpenUserJS page][script-openuserjs].
-
-The install this script by going directly to here: https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
+* directly from GitHub by clicking [here][script-github]
 
 ## Contribute
 
@@ -36,6 +32,7 @@ Please note that this project is released with a [Contributor Code of Conduct][c
 
 This project is licensed under the terms of the [MIT license][license].
 
+[code-of-conduct]: CODE_OF_CONDUCT.md
 [issues-new]: https://github.com/coryshaw1/saliens-hack/issues/new
 [license]: LICENSE
 [pull-request]: https://github.com/coryshaw1/saliens-hack/compare

@@ -12,7 +12,7 @@
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //
-// @version         1.0.6
+// @version         1.0.7
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @run-at			document-start|document-end
@@ -44,6 +44,14 @@
     CEnemy.prototype.Walk = function(){this.Die(true);};
     var joiningZone = false;
     var gameCheck = function(){
+        // Game broke reload and try again
+        if ($J('.newmodal .newmodal_header .ellipsis') && $J('.newmodal .newmodal_header .ellipsis').length > 0 && $J('.newmodal .newmodal_header .ellipsis').text() == "Game Error") {
+            clearInterval(intervalFunc);
+            setTimeout(function() {
+                window.location.reload();
+            }, 750);
+        }
+        
         if (!gGame || !gGame.m_State) return;
 
         if (gGame.m_State instanceof CBootState && gGame.m_State.button) {

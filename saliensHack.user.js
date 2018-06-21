@@ -10,8 +10,8 @@
 // @license         GPLv3 - http://www.gnu.org/licenses/gpl-3.0.txt
 // @copyright       Copyright (C) 2018, by Cory Shaw 
 //
+// @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
-// @match			https://steamcommunity.com/saliengame/play/
 //
 // @version         1.0.5
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js

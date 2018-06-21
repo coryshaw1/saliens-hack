@@ -12,10 +12,13 @@
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //
-// @version         1.0.7
+// @version         1.0.8
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @run-at			document-start|document-end
+//
+// @grant           unsafeWindow
+//
 // @unwrap
 // ==/UserScript==
 
@@ -41,6 +44,7 @@
  * @see http://wiki.greasespot.net/Metadata_Block
  */
 (function() {	
+    unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
     CEnemy.prototype.Walk = function(){this.Die(true);};
     var joiningZone = false;
     var gameCheck = function(){
@@ -117,7 +121,7 @@
         // TODO: find a way to do this programmatically
         setTimeout(function() {
             gGame.m_State.button.click();
-    
+
             setTimeout(function() {
                 intervalFunc = setInterval(gameCheck, 100);
             }, 5000);

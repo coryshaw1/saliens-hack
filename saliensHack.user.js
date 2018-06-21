@@ -1,4 +1,3 @@
-
 // ==UserScript==
 // @name          	Saliens Hack
 // @description     Saliens Hack for Steam Summer Sale 2018 Game - AutoSelect Planet, Invincibility, InstaKill
@@ -13,7 +12,7 @@
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //
-// @version         1.0.5
+// @version         1.0.6
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @run-at			document-start|document-end
@@ -102,14 +101,18 @@
     };
 
     var startGame = function() {
-        console.log('Pressing Play');
+        console.log('Pressing Play in 2 seconds');
 
         clearInterval(intervalFunc);
 
-        gGame.m_State.button.click()
-
+        // wait 2 seconds for game to load
+        // TODO: find a way to do this programmatically
         setTimeout(function() {
-            intervalFunc = setInterval(gameCheck, 100);
-        }, 5000);
+            gGame.m_State.button.click();
+    
+            setTimeout(function() {
+                intervalFunc = setInterval(gameCheck, 100);
+            }, 5000);
+        }, 2000);
     };
 })();

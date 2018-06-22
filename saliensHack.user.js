@@ -6,7 +6,7 @@
 // @namespace       http://github.com/coryshaw1
 // @downloadURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
-// @license         GPLv3 - http://www.gnu.org/licenses/gpl-3.0.txt
+// @license         MIT License
 // @copyright       Copyright (C) 2018, by Cory Shaw 
 //
 // @include         https://steamcommunity.com/saliengame/play

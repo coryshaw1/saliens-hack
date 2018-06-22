@@ -44,7 +44,9 @@
  * @see http://wiki.greasespot.net/Metadata_Block
  */
 (function() {	
-    unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
+    if (unsafeWindow)
+    	unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
+
     CEnemy.prototype.Walk = function(){this.Die(true);};
     var joiningZone = false;
     var joiningPlanet = false;

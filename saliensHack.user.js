@@ -92,7 +92,7 @@
 
         if (gGame.m_State.m_VictoryScreen || gGame.m_State.m_LevelUpScreen) {
             gGame.ChangeState( new CBattleSelectionState( gGame.m_State.m_PlanetData.id ) );
-            console.log('round done');
+            console.log('########## ROUND DONE ##########');
             return;
         }
 	    
@@ -149,10 +149,17 @@
         console.log('EXP: ' + gPlayerInfo.score + ' / ' + gPlayerInfo.next_level_score);
         console.log('--------------------------------');
         var need = gPlayerInfo.next_level_score - gPlayerInfo.score;
-        var gamesn = need / 2400;
-        var lvlupm = need / 2400 * 2;
-        var lvluph = need / 2400 * 2 / 60;
+        var zones = gGame.m_State.m_PlanetData.zones;
+        var dif = zones[zoneId].difficulty;
+        var score
+        if (dif === 1) { score = 600 }
+        if (dif === 2) { score = 1200 }
+        if (dif === 3) { score = 2400 }
+        var gamesn = need / score;
+        var lvlupm = gamesn * 2;
+        var lvluph = gamesn * 2 / 60;
         var lvluphf = lvluph.toFixed(2);
+        console.log('Difficulty: ' + dif);
         console.log('Games needed: ' + gamesn);
         console.log('LVLUP minutes: ' + lvlupm);
         console.log('LVLUP hours: ' + lvluphf);

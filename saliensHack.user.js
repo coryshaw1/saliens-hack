@@ -139,7 +139,24 @@
 
     var joinZone = function(zoneId) {
         if (joiningZone) return;
+        console.log('--------------------------------');
+        console.log('-------------FIGHT--------------');
+        console.log('--------------------------------');
         console.log('Joining zone:', zoneId);
+        console.log('Uncaptured Zones:', gGame.m_State.m_PlanetData.zones.length);
+        console.log('--------------------------------');
+        console.log('LVL: ' + gPlayerInfo.level);
+        console.log('EXP: ' + gPlayerInfo.score + ' / ' + gPlayerInfo.next_level_score);
+        console.log('--------------------------------');
+        var need = gPlayerInfo.next_level_score - gPlayerInfo.score;
+        var gamesn = need / 2400;
+        var lvlupm = need / 2400 * 2;
+        var lvluph = need / 2400 * 2 / 60;
+        var lvluphf = lvluph.toFixed(2);
+        console.log('Games needed: ' + gamesn);
+        console.log('LVLUP minutes: ' + lvlupm);
+        console.log('LVLUP hours: ' + lvluphf);
+        console.log('--------------------------------');
 
         joiningZone = true;
 

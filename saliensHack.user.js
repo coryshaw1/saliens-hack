@@ -47,6 +47,11 @@
     if (typeof unsafeWindow !== "undefined")
     	unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
 
+    //instead of needing to click ok just reload
+    GameLoadError = function() {
+	window.location.reload();
+    }
+
     CEnemy.prototype.Walk = function(){this.Die(true);};
     var joiningZone = false;
     var joiningPlanet = false;

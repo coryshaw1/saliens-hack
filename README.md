@@ -1,5 +1,5 @@
 # saliens-hack
-Hack for Sailens - Steam Summer Sale 2018's Game
+Hack for Saliens - Steam Summer Sale 2018's Game
 
 A userscript to for Saliens, the Steam Summer Sale 2018 Game. Includes AutoSelect Planet, Invincibility, and InstaKill.
 

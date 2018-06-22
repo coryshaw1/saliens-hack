@@ -12,7 +12,7 @@
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //
-// @version         1.1.0
+// @version         1.1.1
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @run-at			document-start|document-end
@@ -44,7 +44,7 @@
  * @see http://wiki.greasespot.net/Metadata_Block
  */
 (function() {	
-    if (unsafeWindow)
+    if (typeof unsafeWindow !== "undefined")
     	unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
 
     CEnemy.prototype.Walk = function(){this.Die(true);};
@@ -86,6 +86,12 @@
             console.log('round done');
             return;
         }
+	    
+	if (gGame.m_State.m_ScoreIncrements && gGame.m_State.m_ScoreIncrements != 0 && gGame.m_State.m_rtBattleStart && gGame.m_State.m_rtBattleEnd) {
+		var ptPerSec = (gGame.m_State.m_rtBattleEnd - gGame.m_State.m_rtBattleStart) / 1000;
+		gGame.m_State.m_Score = gGame.m_State.m_ScoreIncrements * ptPerSec;
+		gGame.m_State.m_ScoreIncrements = 0;
+	}
 
         if (gGame.m_State.m_EnemyManager) {
             joiningZone = false;

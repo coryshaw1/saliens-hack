@@ -14,7 +14,7 @@
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //
-// @version         1.1.1
+// @version         1.1.2
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @run-at			document-start|document-end
@@ -49,17 +49,21 @@
     if (typeof unsafeWindow !== "undefined")
     	unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
 
+    // Game broke reload and try again
+    GameLoadError = function() {
+        clearInterval(intervalFunc);
+        setTimeout(function() {
+            if (typeof unsafeWindow !== "undefined")
+                unsafeWindow.location.reload();
+            else
+                window.location.reload();
+        }, 750);
+    }
+
     CEnemy.prototype.Walk = function(){this.Die(true);};
     var joiningZone = false;
     var joiningPlanet = false;
     var gameCheck = function(){
-        // Game broke reload and try again
-        if ($J('.newmodal .newmodal_header .ellipsis') && $J('.newmodal .newmodal_header .ellipsis').length > 0 && $J('.newmodal .newmodal_header .ellipsis').text() == "Game Error") {
-            clearInterval(intervalFunc);
-            setTimeout(function() {
-                window.location.reload();
-            }, 750);
-        }
         
         if (!gGame || !gGame.m_State) return;
 

@@ -12,7 +12,7 @@
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //
-// @version         1.0.8
+// @version         1.0.9
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @run-at			document-start|document-end
@@ -75,6 +75,17 @@
         }
 
         if (gGame.m_State.m_PlanetData && gGame.m_State.m_PlanetData.zones) {
+            // Go to boss in uncaptured zone if there is one
+            var bossZone = gGame.m_State.m_PlanetData.zones
+                .find(function(z){ return !z.captured && z.boss });
+            
+            if (bossZone && bossZone.zone_position) {
+                console.log('Boss battle at zone:', bossZone.zone_position);
+                joinZone(bossZone.zone_position);
+                return;
+            }
+            
+            // Go to uncaptured zone with the higheset difficulty
             var uncapturedZones = gGame.m_State.m_PlanetData.zones
                 .filter(function(z){ return !z.captured })
                 .sort(function(z1, z2){return z2.difficulty - z1.difficulty});

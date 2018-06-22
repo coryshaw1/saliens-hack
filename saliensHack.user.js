@@ -49,7 +49,7 @@
 
     //instead of needing to click ok just reload
     GameLoadError = function() {
-	window.location.reload();
+	unsafeWindow.location.reload();
     }
 
     CEnemy.prototype.Walk = function(){this.Die(true);};

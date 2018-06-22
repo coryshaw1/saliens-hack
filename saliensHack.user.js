@@ -98,7 +98,7 @@
 	    
 	if (gGame.m_State.m_ScoreIncrements && gGame.m_State.m_ScoreIncrements != 0 && gGame.m_State.m_rtBattleStart && gGame.m_State.m_rtBattleEnd) {
 		var ptPerSec = (gGame.m_State.m_rtBattleEnd - gGame.m_State.m_rtBattleStart) / 1000;
-		gGame.m_State.m_Score = gGame.m_State.m_ScoreIncrements * ptPerSec;
+		gGame.m_State.m_Score = Math.floor(gGame.m_State.m_ScoreIncrements * ptPerSec);
 		gGame.m_State.m_ScoreIncrements = 0;
 	}
 

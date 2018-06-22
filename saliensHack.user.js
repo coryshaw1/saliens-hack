@@ -9,6 +9,8 @@
 // @license         MIT License
 // @copyright       Copyright (C) 2018, by Cory Shaw 
 //
+// @include         https://steamcommunity.com/saliengame
+// @include         https://steamcommunity.com/saliengame/
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //

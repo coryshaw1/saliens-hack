@@ -12,7 +12,7 @@
 // @include         https://steamcommunity.com/saliengame/play
 // @include         https://steamcommunity.com/saliengame/play/
 //
-// @version         1.0.9
+// @version         1.1.0
 // @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @run-at			document-start|document-end
@@ -47,6 +47,7 @@
     unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
     CEnemy.prototype.Walk = function(){this.Die(true);};
     var joiningZone = false;
+    var joiningPlanet = false;
     var gameCheck = function(){
         // Game broke reload and try again
         if ($J('.newmodal .newmodal_header .ellipsis') && $J('.newmodal .newmodal_header .ellipsis').length > 0 && $J('.newmodal .newmodal_header .ellipsis').text() == "Game Error") {
@@ -63,6 +64,21 @@
             return;
         }
 
+        if (gGame.m_State instanceof CPlanetSelectionState && gGame.m_State.m_rgPlanets) {
+            // Go to uncaptured zone with the higheset difficulty
+            var uncapturedPlanets = gGame.m_State.m_rgPlanets
+                .filter(function(p){ return p.state && !p.state.captured })
+                .sort(function(p1, p2){return p2.state.difficulty - p1.state.difficulty});
+            
+            if (uncapturedPlanets.length == 0) {
+                console.log("ALL PLANETS ARE DONE. GG.");
+                return;
+            }
+            
+            joinPlanet(uncapturedPlanets[0].id);
+            return;
+        }
+
         if (gGame.m_State.m_VictoryScreen || gGame.m_State.m_LevelUpScreen) {
             gGame.ChangeState( new CBattleSelectionState( gGame.m_State.m_PlanetData.id ) );
             console.log('round done');
@@ -75,6 +91,7 @@
         }
 
         if (gGame.m_State.m_PlanetData && gGame.m_State.m_PlanetData.zones) {
+            joiningPlanet = false;
             // Go to boss in uncaptured zone if there is one
             var bossZone = gGame.m_State.m_PlanetData.zones
                 .find(function(z){ return !z.captured && z.boss });
@@ -90,8 +107,9 @@
                 .filter(function(z){ return !z.captured })
                 .sort(function(z1, z2){return z2.difficulty - z1.difficulty});
             
-            if (uncapturedZones.length == 0) {
-                console.log("CHOOSE NEW PLANET. THIS ONE IS DONE.");
+            if (uncapturedZones.length == 0 && gGame.m_State.m_PlanetData) {
+                console.log("Planet is completely captured.");
+                leavePlanet(gGame.m_State.m_PlanetData.id);
                 return;
             }
 
@@ -117,6 +135,50 @@
             },
             GameLoadError
         );
+
+        setTimeout(function() {
+            intervalFunc = setInterval(gameCheck, 100);
+        }, 10000);
+    };
+
+    var joinPlanet = function(planetId) {
+        if (joiningPlanet) return;
+        console.log('Joining planet:', planetId);
+
+        joiningPlanet = true;
+
+        clearInterval(intervalFunc);
+
+        gServer.JoinPlanet(
+            planetId,
+            function ( response ) {
+                gGame.ChangeState( new CBattleSelectionState( planetId ) );
+            },
+            function ( response ) {
+                ShowAlertDialog( 'Join Planet Error', 'Failed to join planet.  Please reload your game or try again shortly.' );
+            }
+        );
+
+        setTimeout(function() {
+            intervalFunc = setInterval(gameCheck, 100);
+        }, 10000);
+    };
+    
+    var leavePlanet = function(planetDataId) {
+       
+        if (joiningPlanet) return;
+        console.log('Leaving planet:', planetDataId);
+
+        joiningPlanet = true;
+
+        clearInterval(intervalFunc);
+        
+        gServer.LeaveGameInstance(
+			planetDataId,
+			function() {
+				gGame.ChangeState( new CPlanetSelectionState() );
+			}
+		);
 
         setTimeout(function() {
             intervalFunc = setInterval(gameCheck, 100);

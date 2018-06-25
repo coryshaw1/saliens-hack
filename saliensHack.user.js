@@ -91,6 +91,13 @@
             return;
         }
 
+        if (gGame.m_State instanceof CBattleState) {
+	    var m_SalienInfoBox = new CSalienInfoBox();
+	    m_SalienInfoBox.x = gApp.screen.width - m_SalienInfoBox.width - 12;
+	    m_SalienInfoBox.y = k_ScreenHeight - 72;
+	    gApp.stage.addChild(m_SalienInfoBox);
+        }
+
         if (gGame.m_State.m_VictoryScreen || gGame.m_State.m_LevelUpScreen) {
             gGame.ChangeState( new CBattleSelectionState( gGame.m_State.m_PlanetData.id ) );
             console.log('round done');

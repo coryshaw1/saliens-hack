@@ -2,12 +2,12 @@
 // @name          	Saliens Hack
 // @description     Saliens Hack for Steam Summer Sale 2018 Game - AutoSelect Planet, Invincibility, InstaKill
 //
-// @author			Cory "mbsurfer" Shaw 
+// @author			Cory "mbsurfer" Shaw
 // @namespace       http://github.com/coryshaw1
 // @downloadURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @license         MIT License
-// @copyright       Copyright (C) 2018, by Cory Shaw 
+// @copyright       Copyright (C) 2018, by Cory Shaw
 //
 // @include         https://steamcommunity.com/saliengame
 // @include         https://steamcommunity.com/saliengame/
@@ -26,19 +26,19 @@
 
 /**
  * MIT License
- * 
+ *
  * Copyright (c) 2018 Cory Shaw
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -48,7 +48,7 @@
  * SOFTWARE.
  */
 
-(function() {	
+(function() {
     if (typeof unsafeWindow !== "undefined")
     	unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
 
@@ -64,10 +64,11 @@
     }
 
     CEnemy.prototype.Walk = function(){this.Die(true);};
+    var m_SalienInfoBox = {};
     var joiningZone = false;
     var joiningPlanet = false;
     var gameCheck = function(){
-        
+
         if (!gGame || !gGame.m_State) return;
 
         if (gGame.m_State instanceof CBootState && gGame.m_State.button) {
@@ -80,12 +81,12 @@
             var uncapturedPlanets = gGame.m_State.m_rgPlanets
                 .filter(function(p){ return p.state && !p.state.captured })
                 .sort(function(p1, p2){return p2.state.difficulty - p1.state.difficulty});
-            
+
             if (uncapturedPlanets.length == 0) {
                 console.log("ALL PLANETS ARE DONE. GG.");
                 return;
             }
-            
+
             joinPlanet(uncapturedPlanets[0].id);
             return;
         }
@@ -95,14 +96,25 @@
             console.log('round done');
             return;
         }
-	    
-	if (gGame.m_State.m_ScoreIncrements && gGame.m_State.m_ScoreIncrements != 0 && gGame.m_State.m_rtBattleStart && gGame.m_State.m_rtBattleEnd) {
-		var ptPerSec = (gGame.m_State.m_rtBattleEnd - gGame.m_State.m_rtBattleStart) / 1000;
-		gGame.m_State.m_Score = Math.round(gGame.m_State.m_ScoreIncrements * ptPerSec);
-		gGame.m_State.m_ScoreIncrements = 0;
-	}
+
+        if (gGame.m_State.m_ScoreIncrements && gGame.m_State.m_ScoreIncrements != 0 && gGame.m_State.m_rtBattleStart && gGame.m_State.m_rtBattleEnd) {
+            var ptPerSec = (gGame.m_State.m_rtBattleEnd - gGame.m_State.m_rtBattleStart) / 1000;
+            gGame.m_State.m_Score = gGame.m_State.m_ScoreIncrements * ptPerSec;
+            gGame.m_State.m_ScoreIncrements = 0;
+        }
 
         if (gGame.m_State.m_EnemyManager) {
+
+            if (joiningZone && gGame.m_State instanceof CBattleState) {
+                if (m_SalienInfoBox && m_SalienInfoBox.destroy)
+                    m_SalienInfoBox.destroy();
+
+                m_SalienInfoBox = new CSalienInfoBox();
+                m_SalienInfoBox.x = gApp.screen.width - m_SalienInfoBox.width - 12;
+                m_SalienInfoBox.y = k_ScreenHeight - 72;
+                gApp.stage.addChild(m_SalienInfoBox);
+            }
+
             joiningZone = false;
             return;
         }
@@ -112,18 +124,18 @@
             // Go to boss in uncaptured zone if there is one
             var bossZone = gGame.m_State.m_PlanetData.zones
                 .find(function(z){ return !z.captured && z.boss });
-            
+
             if (bossZone && bossZone.zone_position) {
                 console.log('Boss battle at zone:', bossZone.zone_position);
                 joinZone(bossZone.zone_position);
                 return;
             }
-            
+
             // Go to uncaptured zone with the higheset difficulty
             var uncapturedZones = gGame.m_State.m_PlanetData.zones
                 .filter(function(z){ return !z.captured })
                 .sort(function(z1, z2){return z2.difficulty - z1.difficulty});
-            
+
             if (uncapturedZones.length == 0 && gGame.m_State.m_PlanetData) {
                 console.log("Planet is completely captured.");
                 leavePlanet(gGame.m_State.m_PlanetData.id);
@@ -135,7 +147,7 @@
         }
     };
 
-    var intervalFunc = setInterval(gameCheck, 100);
+    var intervalFunc = setInterval(gameCheck, 200);
 
     var joinZone = function(zoneId) {
         if (joiningZone) return;
@@ -154,7 +166,7 @@
         );
 
         setTimeout(function() {
-            intervalFunc = setInterval(gameCheck, 100);
+            intervalFunc = setInterval(gameCheck, 200);
         }, 10000);
     };
 
@@ -177,19 +189,19 @@
         );
 
         setTimeout(function() {
-            intervalFunc = setInterval(gameCheck, 100);
+            intervalFunc = setInterval(gameCheck, 200);
         }, 10000);
     };
-    
+
     var leavePlanet = function(planetDataId) {
-       
+
         if (joiningPlanet) return;
         console.log('Leaving planet:', planetDataId);
 
         joiningPlanet = true;
 
         clearInterval(intervalFunc);
-        
+
         gServer.LeaveGameInstance(
 			planetDataId,
 			function() {
@@ -198,7 +210,7 @@
 		);
 
         setTimeout(function() {
-            intervalFunc = setInterval(gameCheck, 100);
+            intervalFunc = setInterval(gameCheck, 200);
         }, 10000);
     };
 
@@ -213,7 +225,7 @@
             gGame.m_State.button.click();
 
             setTimeout(function() {
-                intervalFunc = setInterval(gameCheck, 100);
+                intervalFunc = setInterval(gameCheck, 200);
             }, 5000);
         }, 2000);
     };

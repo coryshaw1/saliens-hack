@@ -222,6 +222,13 @@
         // wait 2 seconds for game to load
         // TODO: find a way to do this programmatically
         setTimeout(function() {
+            // button gone?
+            if (!gGame.m_State.button) {
+                console.log('"PLAY" button is gone.. retrying...');
+                startGame();
+                return;
+            }
+
             gGame.m_State.button.click();
 
             setTimeout(function() {

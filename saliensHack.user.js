@@ -64,6 +64,7 @@
     }
 
     CEnemy.prototype.Walk = function(){this.Die(true);};
+    var m_SalienInfoBox = {};
     var joiningZone = false;
     var joiningPlanet = false;
     var gameCheck = function(){
@@ -96,13 +97,24 @@
             return;
         }
 
-    if (gGame.m_State.m_ScoreIncrements && gGame.m_State.m_ScoreIncrements != 0 && gGame.m_State.m_rtBattleStart && gGame.m_State.m_rtBattleEnd) {
-        var ptPerSec = (gGame.m_State.m_rtBattleEnd - gGame.m_State.m_rtBattleStart) / 1000;
-        gGame.m_State.m_Score = gGame.m_State.m_ScoreIncrements * ptPerSec;
-        gGame.m_State.m_ScoreIncrements = 0;
-    }
+        if (gGame.m_State.m_ScoreIncrements && gGame.m_State.m_ScoreIncrements != 0 && gGame.m_State.m_rtBattleStart && gGame.m_State.m_rtBattleEnd) {
+            var ptPerSec = (gGame.m_State.m_rtBattleEnd - gGame.m_State.m_rtBattleStart) / 1000;
+            gGame.m_State.m_Score = gGame.m_State.m_ScoreIncrements * ptPerSec;
+            gGame.m_State.m_ScoreIncrements = 0;
+        }
 
         if (gGame.m_State.m_EnemyManager) {
+
+            if (joiningZone && gGame.m_State instanceof CBattleState) {
+                if (m_SalienInfoBox && m_SalienInfoBox.destroy)
+                    m_SalienInfoBox.destroy();
+
+                m_SalienInfoBox = new CSalienInfoBox();
+                m_SalienInfoBox.x = gApp.screen.width - m_SalienInfoBox.width - 12;
+                m_SalienInfoBox.y = k_ScreenHeight - 72;
+                gApp.stage.addChild(m_SalienInfoBox);
+            }
+
             joiningZone = false;
             return;
         }
@@ -135,7 +147,7 @@
         }
     };
 
-    var intervalFunc = setInterval(gameCheck, 100);
+    var intervalFunc = setInterval(gameCheck, 200);
 
     var joinZone = function(zoneId) {
         if (joiningZone) return;
@@ -154,7 +166,7 @@
         );
 
         setTimeout(function() {
-            intervalFunc = setInterval(gameCheck, 100);
+            intervalFunc = setInterval(gameCheck, 200);
         }, 10000);
     };
 
@@ -177,7 +189,7 @@
         );
 
         setTimeout(function() {
-            intervalFunc = setInterval(gameCheck, 100);
+            intervalFunc = setInterval(gameCheck, 200);
         }, 10000);
     };
 
@@ -198,7 +210,7 @@
         );
 
         setTimeout(function() {
-            intervalFunc = setInterval(gameCheck, 100);
+            intervalFunc = setInterval(gameCheck, 200);
         }, 10000);
     };
 
@@ -210,10 +222,17 @@
         // wait 2 seconds for game to load
         // TODO: find a way to do this programmatically
         setTimeout(function() {
+            // button gone?
+            if (!gGame.m_State.button) {
+                console.log('"PLAY" button is gone.. retrying...');
+                startGame();
+                return;
+            }
+
             gGame.m_State.button.click();
 
             setTimeout(function() {
-                intervalFunc = setInterval(gameCheck, 100);
+                intervalFunc = setInterval(gameCheck, 200);
             }, 5000);
         }, 2000);
     };

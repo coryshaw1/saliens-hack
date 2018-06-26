@@ -53,7 +53,7 @@
         unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
 
     // Game broke reload and try again
-    var GameLoadError = function() {
+    GameLoadError = function() {
         clearInterval(intervalFunc);
         setTimeout(function() {
             if (typeof unsafeWindow !== "undefined")

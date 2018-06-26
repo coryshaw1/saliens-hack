@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name          	Saliens Hack
+// @name            Saliens Hack
 // @description     Saliens Hack for Steam Summer Sale 2018 Game - AutoSelect Planet, Invincibility, InstaKill
 //
-// @author			Cory "mbsurfer" Shaw
+// @author          Cory "mbsurfer" Shaw
 // @namespace       http://github.com/coryshaw1
-// @downloadURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
+// @downloadURL     https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
 // @license         MIT License
 // @copyright       Copyright (C) 2018, by Cory Shaw
@@ -15,9 +15,9 @@
 // @include         https://steamcommunity.com/saliengame/play/
 //
 // @version         1.1.2
-// @updateURL		https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
+// @updateURL       https://github.com/coryshaw1/saliens-hack/raw/master/saliensHack.user.js
 //
-// @run-at			document-start|document-end
+// @run-at          document-start|document-end
 //
 // @grant           unsafeWindow
 //
@@ -50,7 +50,7 @@
 
 (function() {
     if (typeof unsafeWindow !== "undefined")
-    	unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
+        unsafeWindow.requestAnimationFrame = c => { setTimeout(c, 1000 / 60); };
 
     // Game broke reload and try again
     GameLoadError = function() {
@@ -203,11 +203,11 @@
         clearInterval(intervalFunc);
 
         gServer.LeaveGameInstance(
-			planetDataId,
-			function() {
-				gGame.ChangeState( new CPlanetSelectionState() );
-			}
-		);
+            planetDataId,
+            function() {
+                gGame.ChangeState( new CPlanetSelectionState() );
+            }
+        );
 
         setTimeout(function() {
             intervalFunc = setInterval(gameCheck, 200);

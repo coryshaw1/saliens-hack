@@ -142,7 +142,7 @@
                 return;
             }
 
-            joinZone(uncapturedZones[0].zone_position);
+            joinZone(uncapturedZones[1].zone_position);
             return;
         }
     };
